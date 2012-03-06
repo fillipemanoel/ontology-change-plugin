@@ -3,15 +3,7 @@ package revisor.ui;
 import javax.swing.JRadioButton;
 
 /**
- * Author: Márcio Moretto Ribeiro
- * http://www.cecm.usp.br/~marciomr
- * 
- * Universidade de São Paulo
- * Instituto de Matemática e Estatística
- * Date: Jul 10, 2007
- * 
- * 
- * Belief Revisor (Contraction)
+ * Authors: Márcio Moretto Ribeiro and Fillipe Resina
  */
 
 public class PostulateButton extends JRadioButton {

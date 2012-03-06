@@ -4,15 +4,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 /**
- * Author: Márcio Moretto Ribeiro
- * http://www.cecm.usp.br/~marciomr
- * 
- * Universidade de São Paulo
- * Instituto de Matemática e Estatística
- * Date: Jul 10, 2007
- * 
- * 
- * Belief Revisor (Contraction)
+ * Authors: Márcio Moretto Ribeiro and Fillipe Resina
  */
 
 public class PostulateItemListener implements ItemListener {

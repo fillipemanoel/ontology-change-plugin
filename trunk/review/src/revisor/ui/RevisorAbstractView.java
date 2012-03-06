@@ -24,15 +24,7 @@ import org.semanticweb.owlapi.model.OWLClassAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 /**
- * Author: Márcio Moretto Ribeiro
- * http://www.cecm.usp.br/~marciomr
- * 
- * Universidade de São Paulo
- * Instituto de Matemática e Estatística
- * Date: Jul 10, 2007
- * 
- * 
- * Belief Revisor (Contraction)
+ * Authors: Márcio Moretto Ribeiro and Fillipe Resina
  */
 
 public abstract class RevisorAbstractView extends
