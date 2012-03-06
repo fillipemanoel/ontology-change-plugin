@@ -30,7 +30,7 @@ import aterm.ATermAppl;
 /** 
  * Class used to perform contractions.
  * 
- * @author marcio
+ * @author Fillipe Resina
  *
  */
 public class Contraction {

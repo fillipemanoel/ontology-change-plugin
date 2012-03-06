@@ -20,15 +20,9 @@ import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 //TODO arrumar o caso do sucesso para partial meet
 
 /**
- * Author: Márcio Moretto Ribeiro
- * http://www.cecm.usp.br/~marciomr
+ * Class used to perform revisions.
  * 
- * Universidade de São Paulo
- * Instituto de Matemática e Estatística
- * Date: Jul 10, 2007
- * 
- * 
- * Belief Revisor (Contraction)
+ * Author: Fillipe Resina
  */
 
 public class Revision {

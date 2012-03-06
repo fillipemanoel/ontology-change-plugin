@@ -8,15 +8,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.RemoveAxiom;
 
 /**
- * Author: Márcio Moretto Ribeiro
- * http://www.cecm.usp.br/~marciomr
- * 
- * Universidade de São Paulo
- * Instituto de Matemática e Estatística
- * Date: Jul 10, 2007
- * 
- * 
- * Belief Revisor (Contraction)
+ * Authors: Márcio Moretto Ribeiro and Fillipe Resina
  */
 
 public class PostulatesAction implements ActionListener {
