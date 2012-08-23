@@ -19,16 +19,9 @@ software livre que permite criar e editar ontologias. Isso é feito por meio
 de uma interface gráfica e é possível exportar em diversos formatos a base de
 conhecimento criada.
 
-A lógica é a base para a maioria dos formalismos de representação de
-conhecimento. Entre as lógicas existentes, as Lógicas de Descrição ganharam
-muita
-importância. Elas são um subconjunto estruturado da Lógica de Primeira Ordem e,
-apesar de serem menos expressivas que esta última, possuem grande capacidade de
-representação para sistemas baseados em conhecimento. Ainda associados a elas,
-também encontramos métodos eficientes de raciocínio e inferência. Assim, as
-Lógicas de Descrição tornaram-se um dos principais formalismos de
-representação, visto que a linguagem OWL (Web Ontology Language), padrão para
-representação de ontologias na web\footnote{http://www.w3.org/TR/owl-guide/}, é baseada nelas.
+Logic is the basis for most of the formalisms to represent knowledge. In this work, the main one are Description Logics because, besides their great capacity in representing knowledge base systems, they provide efficient reasoning and inference methods. In addition, the [http://www.w3.org/TR/owl-guide/ Web Ontology Language] (OWL), defined as the standard to represent ontologies on the web, is based on Description Logics.
+
+The dynamics of knowledge is also
 
 Muito se discute também sobre o dinamismo do conhecimento, seja na web ou em
 outros campos. Para essa questão, encontramos o estudo de revisão de crenças\cite{[AGM85]}. 
