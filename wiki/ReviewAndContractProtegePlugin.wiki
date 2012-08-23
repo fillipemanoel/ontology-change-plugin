@@ -1,0 +1,52 @@
+#summary A wiki about the plug-in developed for Protégé to implement revision and contraction operations on ontologies.
+
+= Abstract =
+
+Ontologies have been largely used to represent knowledge. Nonetheless, knowledge is not static, what causes us to study its dynamics. Thus, belief revision becomes an important tool to be applied on our knowledge bases. Here, we present an ontology revision tool as a plug-in for Protégé, the most used ontology editor currently.
+
+
+= Introduction = 
+
+The knowledge representation problem is an important topic within current researches in Philosophy, Artificial Intelligence and Cognitive Science. In this context, ontologies have become a great resource as they provide a formal knowledge representation by describing concepts and relations in a paticular domain. There are softwares developed to edit ontologies and the foremost has been Protégé, a free software that allows users to create and edit ontologies. It is done through a graphical interface and, in addition, it is possible to export the knowledge base in different formats.
+
+O problema de representação de conhecimento é um importante foco entre as
+pesquisas atuais em Filosofia, Inteligência Artificial e Ciência Cognitiva.
+Nesse contexto, encontramos as ontologias como grandes aliadas, pois são
+elas que nos fornecem uma representação formal do conhecimento ao descreverem
+conceitos e relacionamentos que são importantes em um domínio particular.
+Existem softwares para edição de ontologias e o principal tem sido o Protégé (see [http://protege.stanford.edu Protégé] official website),
+software livre que permite criar e editar ontologias. Isso é feito por meio
+de uma interface gráfica e é possível exportar em diversos formatos a base de
+conhecimento criada.
+
+A lógica é a base para a maioria dos formalismos de representação de
+conhecimento. Entre as lógicas existentes, as Lógicas de Descrição ganharam
+muita
+importância. Elas são um subconjunto estruturado da Lógica de Primeira Ordem e,
+apesar de serem menos expressivas que esta última, possuem grande capacidade de
+representação para sistemas baseados em conhecimento. Ainda associados a elas,
+também encontramos métodos eficientes de raciocínio e inferência. Assim, as
+Lógicas de Descrição tornaram-se um dos principais formalismos de
+representação, visto que a linguagem OWL (Web Ontology Language), padrão para
+representação de ontologias na web\footnote{http://www.w3.org/TR/owl-guide/}, é baseada nelas.
+
+Muito se discute também sobre o dinamismo do conhecimento, seja na web ou em
+outros campos. Para essa questão, encontramos o estudo de revisão de crenças\cite{[AGM85]}. 
+Em um âmbito mais geral, a teoria de revisão de crenças é desenvolvida e
+estudada a fim de descrever como um agente, baseado em procedimentos racionais
+e munido de um conjunto de crenças,
+deve mudá-las, quando confrontado com novas informações, sejam esses agentes
+seres humanos, programas de computador ou sistemas. Segundo Gärdenfors\cite{[Gar88]}, 
+solucionar o problema de encontrar uma representação de conhecimento apropriada
+é de pouca ajuda se não se souber como evoluir os estados epistêmicos à luz de
+novas informações. Para as ontologias, aplicar um método eficiente de revisão
+de crenças, ou seja, que elimine inconsistências e provoque mudanças mínimas, é
+essencial. Portanto, faz-se necessário que ferramentas tais como o Protégé
+tenham essa capacidade, interagindo com o usuário na revisão de sua ontologia.
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
