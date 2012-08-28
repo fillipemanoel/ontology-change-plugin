@@ -7,7 +7,7 @@ Ontologies have been largely used to represent knowledge. Nonetheless, knowledge
 
 = Introduction = 
 
-The knowledge representation problem is an important topic within current researches in Philosophy, Artificial Intelligence and Cognitive Science. In this context, ontologies have become a great resource as they provide a formal knowledge representation by describing concepts and relations in a paticular domain. There are softwares developed to edit ontologies and the foremost has been Protégé, a free software that allows users to create and edit ontologies. It is done through a graphical interface and, in addition, it is possible to export the knowledge base in different formats.
+The knowledge representation problem is an important topic within current researches in Philosophy, Artificial Intelligence and Cognitive Science. In this context, ontologies have become a great resource as they provide a formal knowledge representation by describing concepts and relations in a paticular domain. There are softwares developed to edit ontologies and the foremost has been [http://protege.stanford.edu/ Protégé], a free software that allows users to create and edit ontologies. It is done through a graphical interface and, in addition, it is possible to export the knowledge base in different formats.
 
 Logic is the basis for most of the formalisms to represent knowledge. In this work, the main one are Description Logics because, besides their great capacity in representing knowledge base systems, they provide efficient reasoning and inference methods. In addition, the [http://www.w3.org/TR/owl-guide/ Web Ontology Language] (OWL), defined as the standard to represent ontologies on the web, is based on Description Logics.
 
