@@ -9,37 +9,8 @@ Ontologies have been largely used to represent knowledge. Nonetheless, knowledge
 
 The knowledge representation problem is an important topic within current researches in Philosophy, Artificial Intelligence and Cognitive Science. In this context, ontologies have become a great resource as they provide a formal knowledge representation by describing concepts and relations in a paticular domain. There are softwares developed to edit ontologies and the foremost has been Protégé, a free software that allows users to create and edit ontologies. It is done through a graphical interface and, in addition, it is possible to export the knowledge base in different formats.
 
-O problema de representação de conhecimento é um importante foco entre as
-pesquisas atuais em Filosofia, Inteligência Artificial e Ciência Cognitiva.
-Nesse contexto, encontramos as ontologias como grandes aliadas, pois são
-elas que nos fornecem uma representação formal do conhecimento ao descreverem
-conceitos e relacionamentos que são importantes em um domínio particular.
-Existem softwares para edição de ontologias e o principal tem sido o Protégé (see [http://protege.stanford.edu Protégé] official website),
-software livre que permite criar e editar ontologias. Isso é feito por meio
-de uma interface gráfica e é possível exportar em diversos formatos a base de
-conhecimento criada.
-
 Logic is the basis for most of the formalisms to represent knowledge. In this work, the main one are Description Logics because, besides their great capacity in representing knowledge base systems, they provide efficient reasoning and inference methods. In addition, the [http://www.w3.org/TR/owl-guide/ Web Ontology Language] (OWL), defined as the standard to represent ontologies on the web, is based on Description Logics.
 
-The dynamics of knowledge is also
+The dynamics of knowledge is also very discussed and, for this topic, we have Belief Revision as a great resource. The belief revision theory discuss how a rational agent should change their beliefs when they receive new information that is inconsistent with the current beliefs. In addition, as we don't want to do unnecessary changes, they need to be minimal. So, for ontologies, it is important to apply an efficient belief revision method, eliminating inconsistencies and promoting minimal changes. 
 
-Muito se discute também sobre o dinamismo do conhecimento, seja na web ou em
-outros campos. Para essa questão, encontramos o estudo de revisão de crenças\cite{[AGM85]}. 
-Em um âmbito mais geral, a teoria de revisão de crenças é desenvolvida e
-estudada a fim de descrever como um agente, baseado em procedimentos racionais
-e munido de um conjunto de crenças,
-deve mudá-las, quando confrontado com novas informações, sejam esses agentes
-seres humanos, programas de computador ou sistemas. Segundo Gärdenfors\cite{[Gar88]}, 
-solucionar o problema de encontrar uma representação de conhecimento apropriada
-é de pouca ajuda se não se souber como evoluir os estados epistêmicos à luz de
-novas informações. Para as ontologias, aplicar um método eficiente de revisão
-de crenças, ou seja, que elimine inconsistências e provoque mudanças mínimas, é
-essencial. Portanto, faz-se necessário que ferramentas tais como o Protégé
-tenham essa capacidade, interagindo com o usuário na revisão de sua ontologia.
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+On this purpose, we have been developing this tool for Protégé as a plug-in, interacting with the user when he or she needs to revise their ontologies.
