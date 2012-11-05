@@ -2,4 +2,4 @@
 
 = The plug-in =
 The plug-in is a _jar_ file you need to add to the folder _plugins_ of Protégé main folder.
-You can download it from the [http://code.google.com/p/review-and-contract/downloads/list _Downloads_] page.
+You can download it from the _[http://code.google.com/p/review-and-contract/downloads/list Downloads]_ page.
