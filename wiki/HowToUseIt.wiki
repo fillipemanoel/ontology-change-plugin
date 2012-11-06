@@ -23,7 +23,7 @@ Suppose that in our ontology we don't want penguins to be represented as flying 
 
 <img src="http://review-and-contract.googlecode.com/files/contraction-colon.jpeg" width=280 height=330 align="middle"/>
 
-Note that _SubClassOf:_ is underlined red as a syntax error. It's due to the colon. However, the internal interpreter of the syntax only accepts it with colon. Thus, for instance you can ignore this warning. As click _Next_, the plug-in returns the kernel set of the belief base representing the ontology in regard of the information chosen to be retracted. We now choose one information of each element of the kernel set and click _Finish_.
+Note that _SubClassOf:_ is underlined red as a syntax error. It's due to the colon. However, the internal interpreter of the syntax only accepts it with colon. Thus, for instance you can ignore this warning. As we click _Next_, the plug-in returns the kernel set of the belief base representing the ontology in regard of the information chosen to be retracted. We now choose one information of each element of the kernel set and click _Finish_.
 
 In our case, the kernel set has only one element with the following information: _Bird_ as a subclass of _FlyingAnimal_ and _Penguin_ as a subclass of _Bird_. We may realize that penguins are really birds and that not all birds fly. So, we choose to eliminate the information _Bird_ subclass of _FlyingAnimal_, like this:
 
