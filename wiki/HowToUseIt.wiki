@@ -19,7 +19,7 @@ Let's explain how it works through a simple example applying _Contraction_. _Rev
 
 We go to the menu _Window_ - _View_ - _Misc views_, select _Contraction_ and then the ontology we built. The plug-in appears under the label _Contraction_ and, on its bottom, there is a blank editor. That's where we write the information we want to contract from the ontology, using the _Manchester OWL Syntax_. If you don't know it, there is an introductory guide [http://www.co-ode.org/downloads/manchesterowlsyntaxeditor/EditorGuide.pdf here].
 
-Suppose that in our ontology we don't want penguins to be represented as flying animals. So, we should contract the information that _Penguin_ is a subclass of _Flying Animal_. We write "Penguin SubClassOf FlyingAnimal" and click the button _Next_. Before clicking _Next_, it should be like this:
+Suppose that in our ontology we don't want penguins to be represented as flying animals. So, we should contract the information that _Penguin_ is a subclass of _FlyingAnimal_. We write "Penguin SubClassOf FlyingAnimal" and click the button _Next_. Before clicking _Next_, it should be like this:
 
 <img src="http://review-and-contract.googlecode.com/files/contraction-colon.jpeg" width=280 height=330 align="middle"/>
 
