@@ -7,4 +7,4 @@ You can download it from the _[http://code.google.com/p/review-and-contract/down
 The next time you run Protégé, the plug-in will be loaded. If you are already running Protégé, you should save your files and restart it to be able to use the plug-in.
 
 = Using it =
-The plug-in appears under the labels _Contraction_ and _Revision_ on the menu _Window_, _View_, _Misc views_. 
+The plug-in appears under the labels _Contraction_ and _Revision_ on the menu _Window_ - _View_ - _Misc views_.
