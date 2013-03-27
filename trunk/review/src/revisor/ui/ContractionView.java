@@ -2,6 +2,7 @@ package revisor.ui;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JLabel;
@@ -13,6 +14,14 @@ import org.semanticweb.owlapi.model.OWLOntology;
 
 import revisor.ui.algorithms.Contraction;
 
+import bcontractor.api.ISet;
+import bcontractor.dl.owl.OWLSentence;
+import bcontractor.dl.owl.pellet.OWLPelletReasoner;
+import bcontractor.kernel.Kernel;
+import bcontractor.kernel.operators.BlackboxKernelOperator;
+
+import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
+import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 
 /**
  * Authors: Márcio Moretto Ribeiro and Fillipe Resina
@@ -26,9 +35,20 @@ public class ContractionView extends RevisorAbstractView {
 	protected Set<Set<OWLAxiom>> getAxioms(OWLModelManager manager, OWLOntology ontology, OWLAxiom alpha, HashMap<String, String> options) {
 		Set<Set<OWLAxiom> > kernel = null;
 		
-		Contraction contraction = new Contraction(options);
-			
-		kernel = contraction.contraction(ontology, alpha);
+		OWLPelletReasoner reasoner = new OWLPelletReasoner(); 
+		BlackboxKernelOperator<OWLSentence> blackbox = new BlackboxKernelOperator<OWLSentence>(reasoner);
+		Kernel<OWLSentence> kernelSet =  blackbox.eval(base, alpha);
+		
+		kernel = new HashSet<Set<OWLAxiom>>();
+		for (ISet<OWLSentence> kernels : kernelSet) {
+			Set<OWLAxiom> set = new HashSet<OWLAxiom>();
+			for (OWLSentence owlSentence : kernel) {
+				set.add(owlSentence.getAxiom());
+			}
+			kernel.add(set);
+		}
+		//Contraction contraction = new Contraction(options);
+		//kernel = contraction.contraction(ontology, alpha);
 		
 		return kernel;
 	}
