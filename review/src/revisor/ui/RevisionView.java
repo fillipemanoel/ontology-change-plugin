@@ -28,6 +28,11 @@ public class RevisionView extends RevisorAbstractView {
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = 804938953979712136L;
+
+	/**
+	 * 
+	 */
 
 	@Override
 	protected Set<Set<OWLAxiom>> getAxioms(OWLModelManager manager, OWLOntology ont, OWLAxiom a, HashMap<String, String> options) {
