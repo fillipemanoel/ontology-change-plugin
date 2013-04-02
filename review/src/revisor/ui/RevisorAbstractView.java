@@ -17,7 +17,6 @@ import javax.swing.JPanel;
 import org.protege.editor.owl.OWLEditorKit;
 import org.protege.editor.owl.model.OWLModelManager;
 import org.protege.editor.owl.ui.clsdescriptioneditor.ExpressionEditor;
-import org.protege.editor.owl.ui.clsdescriptioneditor.ManchesterOWLExpressionCheckerFactory;
 import org.protege.editor.owl.ui.view.AbstractActiveOntologyViewComponent;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassAxiom;
@@ -63,8 +62,7 @@ public abstract class RevisorAbstractView extends
     	ontology = manager.getActiveOntology();
     	
     	OWLEditorKit editorKit = getOWLEditorKit();
-    	ManchesterOWLExpressionCheckerFactory chkFactory = new ManchesterOWLExpressionCheckerFactory(manager);
-    	editor = new ExpressionEditor<OWLClassAxiom>(editorKit, chkFactory.getClassAxiomChecker());
+    	editor = new ExpressionEditor<OWLClassAxiom>(editorKit, editorKit.getModelManager().getOWLExpressionCheckerFactory().getClassAxiomChecker());
     	
 		postulatesGUI();
     }
