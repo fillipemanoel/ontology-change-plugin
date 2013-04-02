@@ -5,14 +5,12 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.coode.owlapi.manchesterowlsyntax.ManchesterOWLSyntaxEditorParser;
 import org.protege.editor.owl.model.OWLModelManager;
-import org.protege.editor.owl.model.parser.ProtegeOWLEntityChecker;
+import org.protege.editor.owl.model.parser.OWLParseException;
 import org.protege.editor.owl.ui.clsdescriptioneditor.ExpressionEditor;
-import org.semanticweb.owlapi.expression.ParserException;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassAxiom;
-import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 /**
@@ -37,7 +35,6 @@ public class KernelAction implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		String expression = editor.getText();
 
 		HashMap<String, String> options = new HashMap<String, String>();
 
@@ -50,30 +47,22 @@ public class KernelAction implements ActionListener {
 		}
 
 		String minimality = options.get("MinimalityType");
-		System.out.println("Hey");
-		//if (editor.isWellFormed()) {
-			System.out.println("Hi");
-			// Prepares and Editor Parser to parse the given expression in Protege Editor
-			OWLDataFactory dataFactory = manager.getOWLDataFactory();
-			ManchesterOWLSyntaxEditorParser parser = new ManchesterOWLSyntaxEditorParser(dataFactory, expression);
-			parser.setOWLEntityChecker(new ProtegeOWLEntityChecker(manager.getOWLEntityFinder()));
-            parser.setBase(ontology.getOntologyID().toString());			
-			OWLAxiom alpha =  null;
-			try {
-				alpha = parser.parseAxiom();
-			} catch (ParserException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+		// Prepares and Editor Parser to parse the given expression in Protege  Editor
+		OWLAxiom alpha = null;
+		try {
+			if(editor.isWellFormed())
+				alpha = editor.createObject();
+			else{
+				throw new OWLParseException("Ill-formed expressions: "+editor.getText());
 			}
+		} catch (OWLException e1) {
+			e1.printStackTrace();
+		}
 
-			// Get the axioms according to the desired operation
-			Set<Set<OWLAxiom>> axioms = revisorView.getAxioms(manager,
-					ontology, alpha, options);
-			// Show them to the user
-			revisorView.axiomsGUI(axioms, minimality);
-		//}
-		System.out.println("Ow");
+		// Get the axioms according to the desired operation
+		Set<Set<OWLAxiom>> axioms = revisorView.getAxioms(manager, ontology, alpha, options);
+		// Show them to the user
+		revisorView.axiomsGUI(axioms, minimality);
 		revisorView.finishState(minimality);
 	}
 }
-

@@ -1,6 +1,7 @@
 package revisor.ui;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JLabel;
@@ -9,10 +10,13 @@ import javax.swing.JPanel;
 import org.protege.editor.owl.model.OWLModelManager;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyChangeException;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
-import revisor.ui.algorithms.Revision;
+import bcontractor.api.ISet;
+import bcontractor.base.ISets;
+import bcontractor.dl.owl.OWLSentence;
+import bcontractor.dl.owl.pellet.OWLPelletReasoner;
+import bcontractor.kernel.Kernel;
+import bcontractor.kernel.operators.BlackboxKernelOperator;
 
 
 /**
@@ -24,24 +28,33 @@ public class RevisionView extends RevisorAbstractView {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected Set<Set<OWLAxiom>> getAxioms(OWLModelManager manager, OWLOntology ont, OWLAxiom a, HashMap<String, String> options) {
 		Set<Set<OWLAxiom> > kernel = null;
 	
-		Revision revision = new Revision(manager, options);
+		OWLPelletReasoner reasoner = new OWLPelletReasoner(); 
+		BlackboxKernelOperator<OWLSentence> blackbox = new BlackboxKernelOperator<OWLSentence>(reasoner);
 		
-		try {
-			kernel = revision.revision(ont, a);
-		} catch (OWLOntologyChangeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OWLOntologyCreationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		ISet<OWLSentence> base = ISets.empty();
+		for (OWLAxiom axiom : ontology.getTBoxAxioms(false)) {
+			base = base.union(new OWLSentence(axiom));
+		}
+		
+		base.union(new OWLSentence(alpha));
+		
+		Kernel<OWLSentence> kernelSet =  blackbox.eval(base);
+		System.out.println("Number of Kernels: "+kernelSet.getAlphaKernelCount());
+		kernel = new HashSet<Set<OWLAxiom>>();
+		for (ISet<OWLSentence> kernels : kernelSet) {
+			Set<OWLAxiom> set = new HashSet<OWLAxiom>();
+			for (OWLSentence owlSentence : kernels) {
+				set.add(owlSentence.getAxiom());
+			}
+			kernel.add(set);
 		}
 		return kernel;
+		
 	}
 
 	@Override

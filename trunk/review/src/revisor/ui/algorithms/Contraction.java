@@ -21,11 +21,11 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLRuntimeException;
 import org.semanticweb.owlapi.model.RemoveAxiom;
 
+import aterm.ATermAppl;
+
 import com.clarkparsia.pellet.owlapiv3.AxiomConverter;
 import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
 import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
-
-import aterm.ATermAppl;
 
 /** 
  * Class used to perform contractions.
