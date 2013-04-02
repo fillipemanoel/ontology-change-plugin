@@ -9,16 +9,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.protege.editor.owl.model.OWLModelManager;
-import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import revisor.ui.algorithms.Contraction;
 
 import bcontractor.api.ISet;
-import bcontractor.dl.owl.OWLSentence;
-import bcontractor.dl.owl.pellet.OWLPelletReasoner;
-import bcontractor.kernel.Kernel;
+import bcontractor.dl.owl.pellet;
 import bcontractor.kernel.operators.BlackboxKernelOperator;
+import bcontractor.dl.owl.OWLSentence;
 
 import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
 import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
@@ -38,7 +36,7 @@ public class ContractionView extends RevisorAbstractView {
 		OWLPelletReasoner reasoner = new OWLPelletReasoner(); 
 		BlackboxKernelOperator<OWLSentence> blackbox = new BlackboxKernelOperator<OWLSentence>(reasoner);
 		Kernel<OWLSentence> kernelSet =  blackbox.eval(base, alpha);
-		
+		OWLAxiom axiom;
 		kernel = new HashSet<Set<OWLAxiom>>();
 		for (ISet<OWLSentence> kernels : kernelSet) {
 			Set<OWLAxiom> set = new HashSet<OWLAxiom>();
