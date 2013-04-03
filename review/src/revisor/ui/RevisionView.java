@@ -14,7 +14,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import bcontractor.api.ISet;
 import bcontractor.base.ISets;
 import bcontractor.dl.owl.OWLSentence;
-import bcontractor.dl.owl.pellet.OWLPelletReasoner;
+import bcontractor.dl.owl.hermit.OWLHermitReasoner;
 import bcontractor.kernel.Kernel;
 import bcontractor.kernel.operators.BlackboxKernelOperator;
 
@@ -35,18 +35,20 @@ public class RevisionView extends RevisorAbstractView {
 	 */
 
 	@Override
-	protected Set<Set<OWLAxiom>> getAxioms(OWLModelManager manager, OWLOntology ont, OWLAxiom a, HashMap<String, String> options) {
+	protected Set<Set<OWLAxiom>> getAxioms(OWLModelManager manager, OWLOntology ont, OWLAxiom alpha, HashMap<String, String> options) {
 		Set<Set<OWLAxiom> > kernel = null;
 	
-		OWLPelletReasoner reasoner = new OWLPelletReasoner(); 
+		OWLHermitReasoner reasoner = new OWLHermitReasoner(); 
 		BlackboxKernelOperator<OWLSentence> blackbox = new BlackboxKernelOperator<OWLSentence>(reasoner);
 		
 		ISet<OWLSentence> base = ISets.empty();
 		for (OWLAxiom axiom : ontology.getTBoxAxioms(false)) {
 			base = base.union(new OWLSentence(axiom));
 		}
-		
-		base.union(new OWLSentence(alpha));
+		for (OWLAxiom axiom : ontology.getABoxAxioms(false)) {
+			base = base.union(new OWLSentence(axiom));
+		}		
+		base = base.union(new OWLSentence(alpha));
 		
 		Kernel<OWLSentence> kernelSet =  blackbox.eval(base);
 		System.out.println("Number of Kernels: "+kernelSet.getAlphaKernelCount());

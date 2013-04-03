@@ -15,7 +15,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import bcontractor.api.ISet;
 import bcontractor.base.ISets;
 import bcontractor.dl.owl.OWLSentence;
-import bcontractor.dl.owl.pellet.OWLPelletReasoner;
+import bcontractor.dl.owl.hermit.OWLHermitReasoner;
 import bcontractor.kernel.operators.BlackboxKernelOperator;
 import bcontractor.kernel.Kernel;
 
@@ -31,11 +31,14 @@ public class ContractionView extends RevisorAbstractView {
 	protected Set<Set<OWLAxiom>> getAxioms(OWLModelManager manager, OWLOntology ontology, OWLAxiom alpha, HashMap<String, String> options) {
 		Set<Set<OWLAxiom> > kernel = null;
 		
-		OWLPelletReasoner reasoner = new OWLPelletReasoner(); 
+		OWLHermitReasoner reasoner = new OWLHermitReasoner(); 
 		BlackboxKernelOperator<OWLSentence> blackbox = new BlackboxKernelOperator<OWLSentence>(reasoner);
 		
 		ISet<OWLSentence> base = ISets.empty();
 		for (OWLAxiom axiom : ontology.getTBoxAxioms(false)) {
+			base = base.union(new OWLSentence(axiom));
+		}
+		for (OWLAxiom axiom : ontology.getABoxAxioms(false)) {
 			base = base.union(new OWLSentence(axiom));
 		}
 		

@@ -6,8 +6,8 @@
 	<classpathentry kind="lib" path="/home/fillipe/Protege_4.2/plugins/org.semanticweb.owl.owlapi.jar"/>
 	<classpathentry kind="lib" path="/home/fillipe/Protege_4.2/plugins/org.protege.editor.owl.jar"/>
 	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/owlapi-3.4.3/owlapi-api-3.4.3.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.2.2/lib/aterm-java-1.6.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.2.2/lib/pellet-owlapiv3.jar"/>
 	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/Plugins - Protege 4.1 LV/org.protege.editor.core.application.jar"/>
+	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/aterm-java-1.6.jar"/>
+	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/pellet-owlapiv3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
