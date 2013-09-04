@@ -24,7 +24,7 @@ public class KernelButton extends JCheckBox {
 		super(s);
 		axiom = ax;
 	}
-
+	
 	public OWLAxiom getAxiom() {
 		return axiom;
 	}

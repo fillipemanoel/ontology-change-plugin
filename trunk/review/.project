@@ -3,6 +3,7 @@
 	<name>review</name>
 	<comment></comment>
 	<projects>
+		<project>bcontractor-Raphael</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
