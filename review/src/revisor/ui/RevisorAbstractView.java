@@ -139,7 +139,7 @@ public abstract class RevisorAbstractView extends
 			kPanel.setLayout(new GridLayout(0,1));
 			kPanel.setBorder(BorderFactory.createTitledBorder("Kernel " + (i+1)));
 			for (OWLAxiom ax : X){
-				KernelButton kernelButton = new KernelButton((ax.toString().replace(iri+"#", "")).replaceAll("<[#/:]", "<"), ax);
+				KernelButton kernelButton = new KernelButton((ax.toString().replace(iri, "")).replaceAll("<[#/:]", "<"), ax);
 				kernelButton.setToolTipText(iri);
 				if (X.size() == 1){
 					kernelButton.setSelected(true);
