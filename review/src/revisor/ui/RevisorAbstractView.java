@@ -18,6 +18,7 @@ import org.protege.editor.owl.OWLEditorKit;
 import org.protege.editor.owl.model.OWLModelManager;
 import org.protege.editor.owl.ui.clsdescriptioneditor.ExpressionEditor;
 import org.protege.editor.owl.ui.view.AbstractActiveOntologyViewComponent;
+import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -125,7 +126,7 @@ public abstract class RevisorAbstractView extends
     	repaint();
 	}
 	
-	private JPanel kernelPanel(Set<Set <OWLAxiom> > kernel){
+	private JPanel kernelPanel(Set<Set <OWLAxiom> > kernel, String iri){
 		JPanel kernelPanel = new JPanel();
 		kernelPanel.setLayout(new GridLayout(0,1));
 		int i = 0;
@@ -138,7 +139,8 @@ public abstract class RevisorAbstractView extends
 			kPanel.setLayout(new GridLayout(0,1));
 			kPanel.setBorder(BorderFactory.createTitledBorder("Kernel " + (i+1)));
 			for (OWLAxiom ax : X){
-				KernelButton kernelButton = new KernelButton(ax.toString(), ax);	
+				KernelButton kernelButton = new KernelButton((ax.toString().replace(iri+"#", "")).replaceAll("<[#/:]", "<"), ax);
+				kernelButton.setToolTipText(iri);
 				if (X.size() == 1){
 					kernelButton.setSelected(true);
 					kernelButton.setEnabled(false);
@@ -208,7 +210,7 @@ public abstract class RevisorAbstractView extends
 		return remainderPanel;
 	}
 	
-	protected void axiomsGUI(Set<Set <OWLAxiom> > axioms, String minimality){
+	protected void axiomsGUI(Set<Set <OWLAxiom> > axioms, String minimality, IRI iri){
 		removeAll();
 		setLayout(new BorderLayout());
 		
@@ -218,7 +220,7 @@ public abstract class RevisorAbstractView extends
 			centerPanel = emptyKernelMessage(alpha);
 		}
 		else if (minimality == "core retainment"){
-			centerPanel = kernelPanel(axioms);
+			centerPanel = kernelPanel(axioms, iri.toString());
 		}
 		else{
 			centerPanel = remainderPanel(axioms, minimality);
