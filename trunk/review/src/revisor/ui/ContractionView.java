@@ -12,6 +12,8 @@ import org.protege.editor.owl.model.OWLModelManager;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 
+import revisor.ui.algorithms.MultipleContraction;
+
 import bcontractor.api.ISet;
 import bcontractor.base.ISets;
 import bcontractor.dl.owl.OWLSentence;
@@ -28,21 +30,26 @@ public class ContractionView extends RevisorAbstractView {
 	private static final long serialVersionUID = -60803185188671886L;
 
 	@Override
-	protected Set<Set<OWLAxiom>> getAxioms(OWLModelManager manager, OWLOntology ontology, OWLAxiom alpha, HashMap<String, String> options) {
+	protected Set<Set<OWLAxiom>> getAxioms(OWLModelManager manager, OWLOntology ontology, HashMap<String, String> options) {
 		Set<Set<OWLAxiom> > kernel = null;
 		
-		OWLHermitReasoner reasoner = new OWLHermitReasoner(); 
-		BlackboxKernelOperator<OWLSentence> blackbox = new BlackboxKernelOperator<OWLSentence>(reasoner);
+		/*OWLHermitReasoner reasoner = new OWLHermitReasoner(); 
+		BlackboxKernelOperator<OWLSentence> blackbox = new BlackboxKernelOperator<OWLSentence>(reasoner);*/
 		
-		ISet<OWLSentence> base = ISets.empty();
+		/*ISet<OWLSentence> base = ISets.empty();
 		for (OWLAxiom axiom : ontology.getTBoxAxioms(false)) {
 			base = base.union(new OWLSentence(axiom));
 		}
 		for (OWLAxiom axiom : ontology.getABoxAxioms(false)) {
 			base = base.union(new OWLSentence(axiom));
-		}
+		}*/
+		MultipleContraction multiCont = new MultipleContraction();
+		Set<OWLAxiom> removed = new HashSet<OWLAxiom>();
+		for(AxiomButton ab : axiomGroup.getButtons())
+			removed.add(ab.getAxiom());
+		kernel = multiCont.contraction(ontology, removed);
 		
-		Kernel<OWLSentence> kernelSet =  blackbox.eval(base, new OWLSentence(alpha));
+		/*Kernel<OWLSentence> kernelSet =  multiCont.contraction(ontology, removed);
 		kernel = new HashSet<Set<OWLAxiom>>();
 		for (ISet<OWLSentence> kernels : kernelSet) {
 			Set<OWLAxiom> set = new HashSet<OWLAxiom>();
@@ -50,11 +57,17 @@ public class ContractionView extends RevisorAbstractView {
 				set.add(owlSentence.getAxiom());
 			}
 			kernel.add(set);
-		}
+		}*/
 		
 		return kernel;
 	}
 
+	@Override
+	protected void axiomGroupInit() {		
+    	if(axiomGroup == null)
+    		axiomGroup = new AxiomGroup("Axioms");
+	}
+	
 	@Override
 	protected void postulateGroupsInit() {
 		
@@ -91,7 +104,7 @@ public class ContractionView extends RevisorAbstractView {
 	protected JPanel emptyKernelMessage(OWLAxiom a){
 		
 		JPanel panel = new JPanel();
-		JLabel label = new JLabel(a + " is not implied");
+		JLabel label = new JLabel("None is implied");
 		label.setForeground(Color.RED);
 		panel.add(label);
 		
