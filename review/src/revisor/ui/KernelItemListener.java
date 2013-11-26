@@ -20,7 +20,7 @@ public class KernelItemListener implements ItemListener {
 				break;
 			for(KernelButton kb: KB){
 				if(kb != null){
-					if (kb != null && kb.getAxiom().toString().equals(kernelButton.getAxiom().toString()))					
+					if (kb.getAxiom().toString().equals(kernelButton.getAxiom().toString()))					
 						kb.setSelected(kernelButton.isSelected());
 				}
 			}

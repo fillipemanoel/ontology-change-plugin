@@ -48,12 +48,15 @@ public abstract class RevisorAbstractView extends
     protected OWLAxiom alpha;
     
 	protected PostulateGroup[] postulateGroups;
+	
+	protected AxiomGroup axiomGroup;
     
     protected List<JButton> mainButtons; 
     
     protected abstract void postulateGroupsInit();
+    protected abstract void axiomGroupInit();
     
-    protected abstract Set<Set<OWLAxiom> > getAxioms(OWLModelManager man, OWLOntology ont, OWLAxiom a, HashMap<String, String> options);
+    protected abstract Set<Set<OWLAxiom> > getAxioms(OWLModelManager man, OWLOntology ont, HashMap<String, String> options);
     
     protected abstract JPanel emptyKernelMessage(OWLAxiom a);
     
@@ -61,11 +64,10 @@ public abstract class RevisorAbstractView extends
     public void initialiseOntologyView() throws Exception {  
     	manager = getOWLModelManager();
     	ontology = manager.getActiveOntology();
-    	
     	OWLEditorKit editorKit = getOWLEditorKit();
-    	editor = new ExpressionEditor<OWLClassAxiom>(editorKit, editorKit.getModelManager().getOWLExpressionCheckerFactory().getClassAxiomChecker());
     	
-		postulatesGUI();
+    	editor = new ExpressionEditor<OWLClassAxiom>(editorKit, manager.getOWLExpressionCheckerFactory().getClassAxiomChecker());
+    	postulatesGUI();
     }
     
     // called automatically when the global selection changes
@@ -92,32 +94,60 @@ public abstract class RevisorAbstractView extends
     	return panel; 
 	}
 	
+	private JPanel axiomGroupPanel(AxiomGroup axiomGroup){
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(0,1));
+    	panel.setBorder(BorderFactory.createTitledBorder(axiomGroup.getTitle()));
+    
+  		ButtonGroup group = new ButtonGroup();    
+  		if(axiomGroup.getButtons() != null)
+  			for(AbstractButton button : axiomGroup.getButtons()) {
+  				panel.add(button);	
+  				group.add(button);
+  			}
+   		 
+    	return panel; 
+	}
+	
 	protected void postulatesGUI(){
 		removeAll();
 		setLayout(new BorderLayout());
 		
-    	JButton next = new JButton("Next");
+    	JButton done = new JButton("Done");
     	KernelAction kernelAction = new KernelAction(this);
-    	next.addActionListener(kernelAction);
+    	done.addActionListener(kernelAction);
+    	
+    	JButton add = new JButton("Add");
+    	AxiomAction axiomAction = new AxiomAction(this);
+    	add.addActionListener(axiomAction);
+    	
+    	JButton remove = new JButton("Remove");
+    	RemoveAction removeAction = new RemoveAction(this);
+    	remove.addActionListener(removeAction);
     	
     	JPanel nextPanel = new JPanel();
-    	nextPanel.add(next);
+    	nextPanel.add(add);
+    	nextPanel.add(remove);
+    	nextPanel.add(done);
     	
-    	JPanel postulatesPanel = new JPanel();
-    	postulatesPanel.setLayout(new GridLayout(0,1));
+    	JPanel postulatesAxiomsPanel = new JPanel();
+    	postulatesAxiomsPanel.setLayout(new GridLayout(0,1));
     	
     	ScrollPane scrollPane = new ScrollPane();
-    	scrollPane.add(postulatesPanel);
+    	scrollPane.add(postulatesAxiomsPanel);
     	
     	postulateGroupsInit();
+    	axiomGroupInit();
     	
     	for (PostulateGroup postulateGroup: postulateGroups){
-    		postulatesPanel.add(buttonGroupPanel(postulateGroup));
+    		postulatesAxiomsPanel.add(buttonGroupPanel(postulateGroup));
     	}
+    	postulatesAxiomsPanel.add(axiomGroupPanel(axiomGroup));
     
     	JPanel mainPanel = new JPanel();
     	mainPanel.setLayout(new BorderLayout());
     	mainPanel.add(scrollPane, BorderLayout.CENTER);
+    	editor.refreshComponent();
     	mainPanel.add(editor, BorderLayout.SOUTH);
    
     	add(mainPanel, BorderLayout.CENTER);
@@ -126,12 +156,29 @@ public abstract class RevisorAbstractView extends
     	repaint();
 	}
 	
+	public void addAxiom(OWLAxiom alpha, String axiom) {
+		axiomGroup.addAxiom(alpha,axiom);
+		postulatesGUI();
+	}
+	
+	public void removeAxioms() {
+		axiomGroup.removeSelectedAxioms();
+	}
+	
+	public void clearAxioms() {
+		axiomGroup.clear();
+	}
+	
+	public void clearKernels() {
+		kernelButtons = null;
+	}
+	
 	private JPanel kernelPanel(Set<Set <OWLAxiom> > kernel, String iri){
 		JPanel kernelPanel = new JPanel();
 		kernelPanel.setLayout(new GridLayout(0,1));
 		int i = 0;
 		
-		kernelButtons = new KernelButton[50][50];
+		kernelButtons = new KernelButton[kernel.size()][50];
 		
 		for (Set<OWLAxiom> X : kernel){
 			int j = 0;
@@ -291,5 +338,6 @@ public abstract class RevisorAbstractView extends
 	public void setAlpha(OWLAxiom alpha) {
 		this.alpha = alpha;
 	}
+			
 }
 

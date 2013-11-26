@@ -30,9 +30,11 @@ public class PostulatesAction implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		if("finish".equals(e.getActionCommand())){
-			revisorView.postulatesGUI();
-			if (kernelButtons == null)
+			if (kernelButtons == null) {
+				revisorView.clearAxioms();
+				revisorView.postulatesGUI();
 				return;
+			}
 			for(KernelButton[] KB: kernelButtons){
 				for (KernelButton kb: KB){				
 					if(kb != null && kb.isSelected()){
@@ -42,6 +44,8 @@ public class PostulatesAction implements ActionListener {
 			}	
 		
 		}
+		revisorView.clearAxioms();
+		revisorView.clearKernels();
 		revisorView.postulatesGUI();		
 	}
 }

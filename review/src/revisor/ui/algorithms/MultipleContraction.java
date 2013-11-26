@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
+import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
@@ -16,13 +17,13 @@ import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLObjectOneOf;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyChangeException;
+import org.semanticweb.owlapi.model.OWLOntologyChangeListener;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLRuntimeException;
 import org.semanticweb.owlapi.model.RemoveAxiom;
 
 import aterm.ATermAppl;
-
 import com.clarkparsia.pellet.owlapiv3.AxiomConverter;
 import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
 import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
@@ -33,7 +34,7 @@ import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
  * @author Fillipe Resina
  *
  */
-public class Contraction {
+public class MultipleContraction {
 	
 	protected String MinimalityType = "core retainment"; 
 	
@@ -44,18 +45,18 @@ public class Contraction {
 	protected Set<Set<OWLAxiom>> cut;
 
 	
-	public Contraction(){
+	public MultipleContraction(){
 		remainderSets = new HashSet<Set<OWLAxiom>>();
 		kernel = new HashSet<Set<OWLAxiom>>();
 		cut = new HashSet<Set<OWLAxiom>>();
 	}
 	/**
-	 * Constructor of the class Contraction. It receives a hash map (options) of strings.
+	 * Constructor of the class MultipleContraction. It receives a hash map (options) of strings.
 	 * This map tells the class which postulates of contraction it must satisfy.
 	 *  
 	 * @param options
 	 */
-	public Contraction(HashMap<String, String> options){
+	public MultipleContraction(HashMap<String, String> options){
 		this();
 		MinimalityType = options.get("MinimalityType");
 	}
@@ -138,9 +139,9 @@ public class Contraction {
 		return result;
 	}
 	
-	public Set<Set<OWLAxiom>> contraction(OWLOntology B, OWLAxiom alpha){
+	public Set<Set<OWLAxiom>> contraction(OWLOntology B, Set<OWLAxiom> C){
 		try {
-			kernel(B, alpha);
+			kernel(B,C);
 			if(MinimalityType == "core retainment")
 				return kernel;
 			else{
@@ -178,38 +179,42 @@ public class Contraction {
 	}
 	
 	/**
-	 * Method that compute all the elements of the kernel of B and alpha using
+	 * Method that compute all the elements of the kernel of B and C using
 	 * one element of the kernel (obtained by a black-box algorithm through
 	 * the method kernelElement in this class) and applying to it an adaptation
 	 * of Reiter's algorithm.
 	 * 
 	 * @param B - the ontology (belief base) on which we will apply the contraction
-	 * @param alpha - the axiom (belief) we will contract
+	 * @param C - the set of axioms (beliefs) by which we will contract
 	 * 
 	 * @return kernel
 	 */
-	public Set< Set<OWLAxiom> > kernel(OWLOntology B, OWLAxiom alpha) throws OWLOntologyCreationException, OWLOntologyChangeException{
+	public Set< Set<OWLAxiom> > kernel(OWLOntology B, Set<OWLAxiom> C) throws OWLOntologyCreationException, OWLOntologyChangeException{
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		
 		PelletReasoner reasoner = PelletReasonerFactory.getInstance().createNonBufferingReasoner(B);
-    	manager.addOntologyChangeListener(reasoner);
-		
+		//Reasoner reasoner = new Reasoner(B);
+		manager.addOntologyChangeListener(reasoner);
+				
     	Queue<Set<OWLAxiom>> queue = new LinkedList<Set<OWLAxiom>>();
     	Set<OWLAxiom> element = null;
     	Set<OWLAxiom> candidate = null;
     	Set<OWLAxiom> hn;
-    	boolean haveToContinue = false;
+    	boolean entails = false;
+    	boolean necessary = false;
     
     	Set<OWLAxiom> exp = null;
 		
-		// If alpha is not entailed in the ontology so the contraction is done
-		if (!reasoner.isEntailed(alpha))
-			return kernel;
+		// If none of C is entailed by the ontology the contraction is done
+    	for(OWLAxiom axiom : C)
+    		if (reasoner.isEntailed(axiom)) {
+    			entails = true;
+    			break;
+    		}
+    	if(!entails) return kernel;    		
 		
-//		exp = convertExplanation(factory, converter, reasoner.getKB().getExplanationSet());
 		exp = B.getAxioms();
 
-		element = this.kernelElement(exp, alpha);
+		element = this.kernelElement(exp,C);
 		kernel.add(element);
 		for(OWLAxiom axiom : element){
     		Set<OWLAxiom> set = new HashSet<OWLAxiom>();
@@ -219,25 +224,33 @@ public class Contraction {
 		//Reiter's algorithm
 		while(!queue.isEmpty()) {
 			hn = queue.remove();
-			
-			haveToContinue = false;
-			for(Set<OWLAxiom> set : cut) {
-				//Check if there is an element of cut that is in hn
-    			if(hn.containsAll(set)) { 
-    				haveToContinue = true;
-    				break;
-    			}
-			}
-    		if(haveToContinue)
-    			continue;
-    		
     		for(OWLAxiom axiom : hn) {
     			RemoveAxiom removeAxiom = new RemoveAxiom(B, axiom);
     			manager.applyChange(removeAxiom);
     		}
     		exp = B.getAxioms();
-    		if(reasoner.isEntailed(alpha)) {
-    			candidate = this.kernelElement(exp, alpha);
+    		necessary = true;
+    		for(Set<OWLAxiom> aKernel : kernel)
+    			if(exp.containsAll(aKernel)){
+    				necessary = false;
+    				break;
+    			}
+    		if(!necessary) {
+    			for(OWLAxiom axiom : hn) {
+        			AddAxiom addAxiom = new AddAxiom(B, axiom);
+        			manager.applyChange(addAxiom);
+        		}
+    			continue;
+    		}
+    		entails = false;
+    		for(OWLAxiom axiom : C) {
+    			if (reasoner.isEntailed(axiom)) {
+        			entails = true;
+        			break;
+        		}
+    		}
+    		if(entails) {
+    			candidate = this.kernelElement(exp, C);
     			kernel.add(candidate);
     			for(OWLAxiom axiom : candidate) {
     				Set<OWLAxiom> set2 = new HashSet<OWLAxiom>();
@@ -246,8 +259,6 @@ public class Contraction {
     				queue.add(set2);
     			}
     		}
-    		else cut.add(hn);
-    		
     		//Restore to the ontology the axioms removed so it can be used again
     		for(OWLAxiom axiom : hn) {
     			AddAxiom addAxiom = new AddAxiom(B, axiom);
@@ -259,49 +270,58 @@ public class Contraction {
 	}		
 		
 	/**
-	 * Method that compute, for contraction, one element of the kernel of exp by alpha
+	 * Method that compute, for contraction, one element of the kernel of exp by C
 	 * using the strategy expand-shrink
 	 * 
 	 * @param exp - a set of axioms from which we will extract one element of its kernel
-	 * @param alpha - the axiom (belief) we want contract
+	 * @param C - the set of axioms (beliefs) by which we want contract
 	 * 
 	 * @return X - a kernel element
 	 */
-	private Set<OWLAxiom> kernelElement(Set<OWLAxiom> exp, OWLAxiom alpha) throws OWLOntologyCreationException, OWLOntologyChangeException{
+	private Set<OWLAxiom> kernelElement(Set<OWLAxiom> exp, Set<OWLAxiom> C) throws OWLOntologyCreationException, OWLOntologyChangeException{
 		
 		// X é um elemento do kernel
 		Set<OWLAxiom> X = new HashSet<OWLAxiom>(); 
 			
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		OWLOntology ont = manager.createOntology(IRI.create("kernel.owl"));
+		OWLOntology ont = manager.createOntology();
 		PelletReasoner reasoner = PelletReasonerFactory.getInstance().createNonBufferingReasoner(ont);
-    	manager.addOntologyChangeListener(reasoner);
+		//Reasoner reasoner = new Reasoner(ont);
+		manager.addOntologyChangeListener(reasoner);
 		
 		// First Part: EXPAND
-		// Adicionamos os axiomas de exp na ontologia criada até que alpha
+		// Adicionamos os axiomas de exp na ontologia criada até que algo de C
 		// seja inferido (esteja contido nas consequências)
 		for (OWLAxiom axiom: exp){				
-			AddAxiom addAxiom = new AddAxiom(ont, axiom);
-			manager.applyChange(addAxiom);
+			manager.addAxiom(ont, axiom);
 			
-			if(reasoner.isEntailed(alpha))
-				break;
+			boolean entails = false;
+			for(OWLAxiom alpha : C) {
+				if (reasoner.isEntailed(alpha)) {
+	    			entails = true;
+	    			break;
+	    		}
+			}
+			if(entails)	break;
 		}
-		
 		// Second Part: SHRINK
-		// Para cada axioma em exp, removemo-lo do conjunto ont (se contido) e verificamos
-		// se alpha não é mais válido. Nesse caso, o axioma é necessário para 
-		// inferir alpha e então ele deve fazer parte de X que pertence ao kernel
-		for (OWLAxiom axiom : exp){
-			if(ont.containsAxiom(axiom)) {
-				RemoveAxiom removeAxiom = new RemoveAxiom(ont, axiom);
-				manager.applyChange(removeAxiom);
-				
-				if(!reasoner.isEntailed(alpha)){
-					X.add(axiom);
-					AddAxiom addAxiom = new AddAxiom(ont, axiom);
-					manager.applyChange(addAxiom);
-				}				
+		// Para cada axioma em ont, removemo-lo e verificamos
+		// se C não é mais implicado. Nesse caso, o axioma é necessário para 
+		// inferir C e então ele deve fazer parte de X que pertence ao kernel
+		for (OWLAxiom axiom : ont.getAxioms()){
+			RemoveAxiom removeAxiom = new RemoveAxiom(ont, axiom);
+			manager.applyChange(removeAxiom);
+			boolean entails = false;
+			for(OWLAxiom alpha : C) {
+				if (reasoner.isEntailed(alpha)) {
+	    			entails = true;
+	    			break;
+	    		}
+			}
+			if(!entails) {
+				X.add(axiom);
+				AddAxiom addAxiom = new AddAxiom(ont, axiom);
+				manager.applyChange(addAxiom);
 			}
 		}
 		// Nesse ponto X é um dos elementos do kernel	

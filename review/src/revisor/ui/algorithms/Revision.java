@@ -63,7 +63,7 @@ public class Revision {
 		AddAxiom addAxiom = new AddAxiom(B, alpha);
 		manager.applyChange(addAxiom);
 		
-		Contraction contraction = new Contraction(opt);
+		MultipleContraction contraction = new MultipleContraction(opt);
 		Set<Set<OWLAxiom>> revision = contraction.mips(B);
 		
 		if (SuccessType == "no success")

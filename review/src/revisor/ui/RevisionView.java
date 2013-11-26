@@ -64,6 +64,11 @@ public class RevisionView extends RevisorAbstractView {
 		
 	}
 
+	protected void axiomGroupInit() {		
+    	if(axiomGroup == null)
+    		axiomGroup = new AxiomGroup("Axioms");
+	}
+	
 	@Override
 	protected void postulateGroupsInit(){
 		
