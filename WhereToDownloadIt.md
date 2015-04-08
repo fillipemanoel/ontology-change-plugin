@@ -1,0 +1,1 @@
+As Google Code no longer allow us to upload files, the plug-in jar files where moved to a Google Drive folder and can be downloaded through the following link: https://drive.google.com/#folders/0B_l_W2QisI2TRWl2OUF0ZWpMTkk

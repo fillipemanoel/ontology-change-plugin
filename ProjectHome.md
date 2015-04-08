@@ -1,0 +1,1 @@
+A Plug-in for the ontology editor Protégé that offers revision and contraction services for ontologies based on Belief Base Revision theory. It is being developed in JAVA, using OWL API and Pellet reasoner.
