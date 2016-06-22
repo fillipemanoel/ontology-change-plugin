@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Revisar
-Bundle-SymbolicName: review
+Bundle-Name: BeliefChange
+Bundle-SymbolicName: ontology_change_plugin
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: revisar.Activator
+Bundle-Activator: BeliefChange.Activator
 Require-Bundle: org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
