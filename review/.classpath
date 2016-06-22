@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/bcontractor-Raphael"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/Plugins - Protege 4.1 LV/org.protege.common.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/Plugins - Protege 4.1 LV/org.protege.editor.core.application.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/Plugins - Protege 4.1 LV/org.protege.editor.owl.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/Plugins - Protege 4.1 LV/org.semanticweb.owl.owlapi.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/owlapi-3.4.3/owlapi-api-3.4.3.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/aterm-java-1.6.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/HermiT/HermiT.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/HermiT/org.semanticweb.HermiT.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/pellet-cli.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/pellet-core.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/pellet-datatypes.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/pellet-dig.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/pellet-el.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/pellet-explanation.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/pellet-modularity.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/pellet-owlapiv3.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/pellet-pellint.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/pellet-query.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/pellet-rules.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/pellet-test.jar"/>
-	<classpathentry kind="lib" path="/home/fillipe/ScientificResearch-TCC/pellet-2.3.0/lib/servlet.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
