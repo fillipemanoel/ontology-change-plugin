@@ -9,7 +9,7 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassAxiom;
 import org.semanticweb.owlapi.model.OWLException;
 
-/**
+/** 
  * @author Fillipe Resina
  */
 public class AxiomAction implements ActionListener{

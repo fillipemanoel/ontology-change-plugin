@@ -5,7 +5,7 @@ import javax.swing.JCheckBox;
 import org.semanticweb.owlapi.model.OWLAxiom;
 
 /**
- * Authors: Márcio Moretto Ribeiro and Fillipe Resina
+ * @author Márcio Ribeiro and Fillipe Resina
  */
 
 public class KernelButton extends JCheckBox {

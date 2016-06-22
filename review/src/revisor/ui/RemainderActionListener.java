@@ -6,6 +6,9 @@ import java.util.List;
 
 import javax.swing.JButton;
 
+/** 
+ * @author Marcio Ribeiro and Fillipe Resina
+ */
 public class RemainderActionListener implements ActionListener {
 
 	public List<KernelButton> kernelButtons; 

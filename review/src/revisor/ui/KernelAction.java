@@ -14,7 +14,7 @@ import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 /**
- * Authors: Márcio Moretto Ribeiro and Fillipe Resina
+ * @author Márcio Ribeiro and Fillipe Resina
  */
 
 public class KernelAction implements ActionListener {
@@ -41,12 +41,12 @@ public class KernelAction implements ActionListener {
 		for (PostulateGroup postGroup : revisorView.postulateGroups) {
 			for (PostulateButton button : postGroup.buttons) {
 				if (button.isSelected()) {
-					options.put(postGroup.title + "Type", button.getText());
+					options.put(postGroup.title, button.getText());
 				}
 			}
 		}
 
-		String minimality = options.get("MinimalityType");
+		String minimality = options.get("Minimality Type");
 		// Prepares and Editor Parser to parse the given expression in Protege  Editor
 		OWLAxiom alpha = null;
 		try {

@@ -5,6 +5,9 @@ import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
 
+/** 
+ * @author Fillipe Resina
+ */
 public class AxiomGroup {
 	protected Set<AxiomButton> buttons;
 	protected String title;

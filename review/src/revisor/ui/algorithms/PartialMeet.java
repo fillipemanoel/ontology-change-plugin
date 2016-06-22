@@ -5,13 +5,14 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
-//import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyChangeException;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+//import org.semanticweb.owlapi.reasoner.OWLReasoner;
+//import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 
 import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
 import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
@@ -40,6 +41,7 @@ public class PartialMeet {
 	
 	public Set<Set<OWLAxiom>> singleContractionPM(OWLOntology B, OWLAxiom alpha){
 		try {
+			remainderSet.clear();
 			partialMeet(B,alpha);
 			return remainderSet;	
 		} catch (OWLOntologyCreationException e) {
@@ -50,6 +52,10 @@ public class PartialMeet {
 			e.printStackTrace();
 		}
 		return null;		
+	}
+	
+	public void clear() {
+		remainderSet.clear();
 	}
 	
 	/**
@@ -65,6 +71,8 @@ public class PartialMeet {
 	public Set< Set<OWLAxiom> > partialMeet(OWLOntology B, OWLAxiom alpha) throws OWLOntologyCreationException, OWLOntologyChangeException{
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		PelletReasoner reasoner = PelletReasonerFactory.getInstance().createNonBufferingReasoner(B);
+		//OWLReasonerFactory reasonerFactory = new Reasoner.ReasonerFactory();
+		//OWLReasoner reasoner = reasonerFactory.createReasoner(B);
 		//Reasoner reasoner = new Reasoner(B);
 		manager.addOntologyChangeListener(reasoner);
 				
@@ -93,6 +101,7 @@ public class PartialMeet {
 		
 		OWLOntology ont = manager.createOntology();
 		reasoner = PelletReasonerFactory.getInstance().createNonBufferingReasoner(ont);
+		//reasoner = reasonerFactory.createReasoner(ont);
 		
 		boolean entailed;
 		while(!queue.isEmpty()) {
@@ -133,7 +142,8 @@ public class PartialMeet {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology ont = manager.createOntology();
 		PelletReasoner reasoner = PelletReasonerFactory.getInstance().createNonBufferingReasoner(ont);
-		//Reasoner reasoner = new Reasoner(ont);
+		//OWLReasonerFactory reasonerFactory = new Reasoner.ReasonerFactory();
+		//OWLReasoner reasoner = reasonerFactory.createReasoner(ont);
 		manager.addOntologyChangeListener(reasoner);
 		
 		//remElem is the element of the remainder set to be returned

@@ -4,7 +4,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 /**
- * Authors: Márcio Moretto Ribeiro and Fillipe Resina
+ * @author Márcio Ribeiro and Fillipe Resina
  */
 
 public class PostulateItemListener implements ItemListener {

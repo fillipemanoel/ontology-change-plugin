@@ -10,17 +10,21 @@ import javax.swing.JPanel;
 import org.protege.editor.owl.model.OWLModelManager;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyChangeException;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
-import bcontractor.api.ISet;
-import bcontractor.base.ISets;
-import bcontractor.dl.owl.OWLSentence;
-import bcontractor.dl.owl.hermit.OWLHermitReasoner;
-import bcontractor.kernel.Kernel;
-import bcontractor.kernel.operators.BlackboxKernelOperator;
+import revisor.ui.algorithms.Revision;
+
+//import bcontractor.api.ISet;
+//import bcontractor.base.ISets;
+//import bcontractor.dl.owl.OWLSentence;
+//import bcontractor.dl.owl.hermit.OWLHermitReasoner;
+//import bcontractor.kernel.Kernel;
+//import bcontractor.kernel.operators.BlackboxKernelOperator;
 
 
 /**
- * Authors: Márcio Moretto Ribeiro and Fillipe Resina
+ * @author Márcio Ribeiro and Fillipe Resina
  */
 
 public class RevisionView extends RevisorAbstractView {
@@ -35,31 +39,46 @@ public class RevisionView extends RevisorAbstractView {
 	 */
 
 	@Override
-	protected Set<Set<OWLAxiom>> getAxioms(OWLModelManager manager, OWLOntology ont, OWLAxiom alpha, HashMap<String, String> options) {
+	protected Set<Set<OWLAxiom>> getAxioms(OWLModelManager manager, OWLOntology ont, HashMap<String, String> options) {
 		Set<Set<OWLAxiom> > kernel = null;
+		
+		Revision revise = new Revision(manager,options);
+		Set<OWLAxiom> removed = new HashSet<OWLAxiom>();
+		for(AxiomButton ab : axiomGroup.getButtons())
+			removed.add(ab.getAxiom());
+		try {
+			kernel = revise.revision(ontology, removed);
+		} catch (OWLOntologyChangeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OWLOntologyCreationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
-		OWLHermitReasoner reasoner = new OWLHermitReasoner(); 
-		BlackboxKernelOperator<OWLSentence> blackbox = new BlackboxKernelOperator<OWLSentence>(reasoner);
+//		OWLHermitReasoner reasoner = new OWLHermitReasoner(); 
+//		BlackboxKernelOperator<OWLSentence> blackbox = new BlackboxKernelOperator<OWLSentence>(reasoner);
+//		
+//		ISet<OWLSentence> base = ISets.empty();
+//		for (OWLAxiom axiom : ontology.getTBoxAxioms(false)) {
+//			base = base.union(new OWLSentence(axiom));
+//		}
+//		for (OWLAxiom axiom : ontology.getABoxAxioms(false)) {
+//			base = base.union(new OWLSentence(axiom));
+//		}		
+//		base = base.union(new OWLSentence(alpha));
+//		
+//		Kernel<OWLSentence> kernelSet =  blackbox.eval(base);
+//		System.out.println("Number of Kernels: "+kernelSet.getAlphaKernelCount());
+//		kernel = new HashSet<Set<OWLAxiom>>();
+//		for (ISet<OWLSentence> kernels : kernelSet) {
+//			Set<OWLAxiom> set = new HashSet<OWLAxiom>();
+//			for (OWLSentence owlSentence : kernels) {
+//				set.add(owlSentence.getAxiom());
+//			}
+//			kernel.add(set);
+//		}
 		
-		ISet<OWLSentence> base = ISets.empty();
-		for (OWLAxiom axiom : ontology.getTBoxAxioms(false)) {
-			base = base.union(new OWLSentence(axiom));
-		}
-		for (OWLAxiom axiom : ontology.getABoxAxioms(false)) {
-			base = base.union(new OWLSentence(axiom));
-		}		
-		base = base.union(new OWLSentence(alpha));
-		
-		Kernel<OWLSentence> kernelSet =  blackbox.eval(base);
-		System.out.println("Number of Kernels: "+kernelSet.getAlphaKernelCount());
-		kernel = new HashSet<Set<OWLAxiom>>();
-		for (ISet<OWLSentence> kernels : kernelSet) {
-			Set<OWLAxiom> set = new HashSet<OWLAxiom>();
-			for (OWLSentence owlSentence : kernels) {
-				set.add(owlSentence.getAxiom());
-			}
-			kernel.add(set);
-		}
 		return kernel;
 		
 	}
@@ -88,9 +107,9 @@ public class RevisionView extends RevisorAbstractView {
 		PostulateButton tenacityButton = new PostulateButton("tenacity");
 		PostulateButton inertnessButton = new PostulateButton("inerteness");
 		
-		PostulateButton strongConsistButton = new PostulateButton("strong consistence");
+		PostulateButton strongConsistButton = new PostulateButton("strong consistency");
 		strongConsistButton.setToolTipText("K*a is consistent");
-		PostulateButton weakConsistButton = new PostulateButton("weak consistence");
+		PostulateButton weakConsistButton = new PostulateButton("weak consistency");
 		weakConsistButton.setToolTipText("If a is consistent then K*a is consistent");
 		
 		PostulateButton noUniformityButton = new PostulateButton("no uniformity");
@@ -127,8 +146,8 @@ public class RevisionView extends RevisorAbstractView {
 		
 		postulateGroups[0] = new PostulateGroup("Success", successButtons);
 		postulateGroups[1] = new PostulateGroup("Inclusion", inclusionButton);
-		postulateGroups[2] = new PostulateGroup("Minimality", minimalityButtons);
-		postulateGroups[3] = new PostulateGroup("Consistence", consistButtons);
+		postulateGroups[2] = new PostulateGroup("Minimality Type", minimalityButtons);
+		postulateGroups[3] = new PostulateGroup("Consistency", consistButtons);
 		postulateGroups[4] = new PostulateGroup("Uniformity", uniformityButtons);
 		postulateGroups[5] = new PostulateGroup("Pre-expansion", preExpansionButton);
 	}

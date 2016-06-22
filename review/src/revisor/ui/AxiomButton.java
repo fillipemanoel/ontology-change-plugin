@@ -5,7 +5,7 @@ import javax.swing.JCheckBox;
 import org.semanticweb.owlapi.model.OWLAxiom;
 
 /**
- * Author: Fillipe Resina
+ * @author Fillipe Resina
  */
 
 public class AxiomButton extends JCheckBox {

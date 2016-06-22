@@ -3,7 +3,7 @@ package revisor.ui;
 import javax.swing.JRadioButton;
 
 /**
- * Authors: Márcio Moretto Ribeiro and Fillipe Resina
+ * @author Márcio Ribeiro and Fillipe Resina
  */
 
 public class PostulateButton extends JRadioButton {

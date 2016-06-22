@@ -3,6 +3,9 @@ package revisor.ui;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+/** 
+ * @author Marcio Ribeiro and Fillipe Resina
+ */
 public class KernelItemListener implements ItemListener {
 	
 	RevisorAbstractView revisor;

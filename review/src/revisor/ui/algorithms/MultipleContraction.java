@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
-import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
@@ -29,7 +28,7 @@ import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
 import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 
 /** 
- * Class used to perform contractions.
+ * Class with algorithms to perform multiple contractions.
  * 
  * @author Fillipe Resina
  *
@@ -37,6 +36,7 @@ import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 public class MultipleContraction {
 	
 	protected String MinimalityType = "core retainment"; 
+	protected String MultContType = "Package";
 	
 	protected Set<Set<OWLAxiom>> remainderSets;
 	
@@ -58,7 +58,8 @@ public class MultipleContraction {
 	 */
 	public MultipleContraction(HashMap<String, String> options){
 		this();
-		MinimalityType = options.get("MinimalityType");
+		MinimalityType = options.get("Minimality Type");
+		MultContType = options.get("Multiple Contraction Type");
 	}
 	
 	/**
@@ -141,12 +142,13 @@ public class MultipleContraction {
 	
 	public Set<Set<OWLAxiom>> contraction(OWLOntology B, Set<OWLAxiom> C){
 		try {
-			kernel(B,C);
-			if(MinimalityType == "core retainment")
+			if(MultContType == "Package") {
+				kernelPackage(B,C);
 				return kernel;
+			}
 			else{
-				this.reiter(B);
-				return remainderSets;	
+				kernelChoice(B,C);
+				return kernel;	
 			}
 		} catch (OWLOntologyCreationException e) {
 			// TODO Auto-generated catch block
@@ -159,37 +161,17 @@ public class MultipleContraction {
 		return null;		
 	}
 	
-	public Set<Set<OWLAxiom>> mips(OWLOntology B){
-		try {
-			Set<Set<OWLAxiom>> mip = kernelMips(B);
-			if(MinimalityType == "core retainment")
-				return mip;
-			else{
-				this.reiter(B);
-				return remainderSets;
-			}
-		} catch (OWLOntologyCreationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OWLOntologyChangeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
 	/**
-	 * Method that compute all the elements of the kernel of B and C using
+	 * Method that compute all the elements of the kernel set of B by C using
 	 * one element of the kernel (obtained by a black-box algorithm through
-	 * the method kernelElement in this class) and applying to it an adaptation
-	 * of Reiter's algorithm.
-	 * 
+	 * the method kernelPackageElement in this class) via package contraction  
+	 *  
 	 * @param B - the ontology (belief base) on which we will apply the contraction
 	 * @param C - the set of axioms (beliefs) by which we will contract
 	 * 
 	 * @return kernel
 	 */
-	public Set< Set<OWLAxiom> > kernel(OWLOntology B, Set<OWLAxiom> C) throws OWLOntologyCreationException, OWLOntologyChangeException{
+	public Set< Set<OWLAxiom> > kernelPackage(OWLOntology B, Set<OWLAxiom> C) throws OWLOntologyCreationException, OWLOntologyChangeException{
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		PelletReasoner reasoner = PelletReasonerFactory.getInstance().createNonBufferingReasoner(B);
 		//Reasoner reasoner = new Reasoner(B);
@@ -214,7 +196,7 @@ public class MultipleContraction {
 		
 		exp = B.getAxioms();
 
-		element = this.kernelElement(exp,C);
+		element = this.kernelPackageElement(exp,C);
 		kernel.add(element);
 		for(OWLAxiom axiom : element){
     		Set<OWLAxiom> set = new HashSet<OWLAxiom>();
@@ -250,7 +232,7 @@ public class MultipleContraction {
         		}
     		}
     		if(entails) {
-    			candidate = this.kernelElement(exp, C);
+    			candidate = this.kernelPackageElement(exp, C);
     			kernel.add(candidate);
     			for(OWLAxiom axiom : candidate) {
     				Set<OWLAxiom> set2 = new HashSet<OWLAxiom>();
@@ -271,14 +253,14 @@ public class MultipleContraction {
 		
 	/**
 	 * Method that compute, for contraction, one element of the kernel of exp by C
-	 * using the strategy expand-shrink
+	 * using the strategy expand-shrink (for package contraction)
 	 * 
 	 * @param exp - a set of axioms from which we will extract one element of its kernel
 	 * @param C - the set of axioms (beliefs) by which we want contract
 	 * 
 	 * @return X - a kernel element
 	 */
-	private Set<OWLAxiom> kernelElement(Set<OWLAxiom> exp, Set<OWLAxiom> C) throws OWLOntologyCreationException, OWLOntologyChangeException{
+	private Set<OWLAxiom> kernelPackageElement(Set<OWLAxiom> exp, Set<OWLAxiom> C) throws OWLOntologyCreationException, OWLOntologyChangeException{
 		
 		// X é um elemento do kernel
 		Set<OWLAxiom> X = new HashSet<OWLAxiom>(); 
@@ -328,76 +310,70 @@ public class MultipleContraction {
 		return X;	
 	}
 	
-		
 	/**
-	 * Method that compute, for revision, all the elements of the kernel of B
-	 * using one element of the kernel (obtained by a black-box algorithm through
-	 * the method kernelMipsElement in this class) and applying to it an adaptation
-	 * of Reiter's algorithm.
+	 * Method that compute all the elements of the kernel of B and C using
+	 * one element of the kernel (obtained by a black-box algorithm through
+	 * the method kernelChoiceElement in this class) via choice contraction 
 	 * 
-	 * @param B - an inconsistent ontology for which we will compute its kernel
+	 * @param B - the ontology (belief base) on which we will apply the contraction
+	 * @param C - the set of axioms (beliefs) by which we will contract
 	 * 
-	 * @return mips - the kernel of B
-	 */	
-	public Set< Set<OWLAxiom> > kernelMips(OWLOntology B) throws OWLOntologyChangeException, OWLOntologyCreationException{
-		
-		Set< Set<OWLAxiom> > mips = new HashSet<Set <OWLAxiom> >();		
+	 * @return kernel
+	 */
+	public Set< Set<OWLAxiom> > kernelChoice(OWLOntology B, Set<OWLAxiom> C) throws OWLOntologyCreationException, OWLOntologyChangeException{
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		
 		PelletReasoner reasoner = PelletReasonerFactory.getInstance().createNonBufferingReasoner(B);
-    	manager.addOntologyChangeListener(reasoner);
-		
+		//Reasoner reasoner = new Reasoner(B);
+		manager.addOntologyChangeListener(reasoner);
+				
     	Queue<Set<OWLAxiom>> queue = new LinkedList<Set<OWLAxiom>>();
+    	Set<OWLAxiom> element = null;
     	Set<OWLAxiom> candidate = null;
     	Set<OWLAxiom> hn;
-    	boolean haveToContinue = false;
+    	boolean entails = true;
+//    	boolean necessary = false;
+    
+    	Set<OWLAxiom> exp = null;
 		
-//    	AxiomConverter converter = new AxiomConverter( (KnowledgeBase) B, factory );
-//		pellet.getKB().setDoExplanation( true );
-//		set returned by the tracing
-//		exp = convertExplanation( converter, pellet.getKB().getExplanationSet() );
-//		
-//		exp = convertExplanation( factory, converter, pellet.getKB().getExplanationSet() );
-//		
-		Set<OWLAxiom> exp = null;
-//		exp = convertExplanation(factory, converter, reasoner.getKB().getExplanationSet() );
+		// If something of C is not entailed by the ontology, the contraction is empty
+    	for(OWLAxiom axiom : C)
+    		if (!reasoner.isEntailed(axiom)) {
+    			entails = false;
+    			break;
+    		}
+    	if(!entails) return kernel;    		
+		
 		exp = B.getAxioms();
-		
-		//Se a ontologia já é consistente não há o que calcular
-		if (reasoner.isConsistent()){
-			return mips;
-		}		
-		
-		Set<OWLAxiom> X = new HashSet<OWLAxiom>();
-		X = kernelMipsElement(exp);
-		mips.add(X);
-	
-		for(OWLAxiom axiom : X){
+
+		element = this.kernelChoiceElement(exp,C);
+		kernel.add(element);
+		for(OWLAxiom axiom : element){
     		Set<OWLAxiom> set = new HashSet<OWLAxiom>();
     		set.add(axiom);
     		queue.add(set);
     	}
-		//Reiter's algorithm
+
 		while(!queue.isEmpty()) {
 			hn = queue.remove();
-			
-			haveToContinue = false;
-			for(Set<OWLAxiom> set : cut) {
-				//Check if there is an element of cut that is in hn
-    			if(hn.containsAll(set)) { 
-    				haveToContinue = true;
-    				break;
-    			}
-			}
-    		if(haveToContinue)
-    			continue;
-    		for(OWLAxiom axiom : hn) {
-    			RemoveAxiom removeAxiom = new RemoveAxiom(B, axiom);
-    			manager.applyChange(removeAxiom);
-    		}
-    		if(!reasoner.isConsistent()) {
-    			exp = B.getAxioms();
-    			candidate = this.kernelMipsElement(exp);
+    		manager.removeAxioms(B,hn);    		
+    		exp = B.getAxioms();
+    		
+//    		necessary = true;
+//    		for(Set<OWLAxiom> aKernel : kernel)
+//    			if(exp.containsAll(aKernel)){
+//    				necessary = false;
+//    				break;
+//    			}
+//    		if(!necessary) {
+//    			for(OWLAxiom axiom : hn) {
+//        			AddAxiom addAxiom = new AddAxiom(B, axiom);
+//        			manager.applyChange(addAxiom);
+//        		}
+//    			continue;
+//    		}
+    		
+    		if(reasoner.isEntailed(C)) {
+    			candidate = this.kernelChoiceElement(exp, C);
     			kernel.add(candidate);
     			for(OWLAxiom axiom : candidate) {
     				Set<OWLAxiom> set2 = new HashSet<OWLAxiom>();
@@ -406,83 +382,54 @@ public class MultipleContraction {
     				queue.add(set2);
     			}
     		}
-    		else cut.add(hn);
-    		
     		//Restore to the ontology the axioms removed so it can be used again
-    		for(OWLAxiom axiom : hn) {
-    			AddAxiom addAxiom = new AddAxiom(B, axiom);
-    			manager.applyChange(addAxiom);
-    		}
+    		manager.addAxioms(B,hn);
 		}
 		
-		return mips;	
-	}	
-	
+		return kernel;
+	}		
+		
 	/**
-	 * Method that compute, for revision, one element of the kernel of exp
+	 * Method that compute, for contraction, one element of the kernel of exp by C
 	 * using the strategy expand-shrink
 	 * 
 	 * @param exp - a set of axioms from which we will extract one element of its kernel
+	 * @param C - the set of axioms (beliefs) by which we want contract
 	 * 
 	 * @return X - a kernel element
 	 */
-	private Set<OWLAxiom> kernelMipsElement(Set<OWLAxiom> exp) throws OWLOntologyCreationException, OWLOntologyChangeException{
+	private Set<OWLAxiom> kernelChoiceElement(Set<OWLAxiom> exp, Set<OWLAxiom> C) throws OWLOntologyCreationException, OWLOntologyChangeException{
+		
 		// X é um elemento do kernel
 		Set<OWLAxiom> X = new HashSet<OWLAxiom>(); 
 			
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		OWLOntology ont = manager.createOntology(IRI.create("mips.owl"));
+		OWLOntology ont = manager.createOntology();
 		PelletReasoner reasoner = PelletReasonerFactory.getInstance().createNonBufferingReasoner(ont);
-    	manager.addOntologyChangeListener(reasoner);
-	
+		//Reasoner reasoner = new Reasoner(ont);
+		manager.addOntologyChangeListener(reasoner);
+		
 		// First Part: EXPAND
-		// Adicionamos os axiomas de exp na ontologia criada até que ela
-		// seja inconsistente
-		for (OWLAxiom axiom: exp){
-			AddAxiom addAxiom = new AddAxiom(ont, axiom);
-			manager.applyChange(addAxiom);
-			if (!reasoner.isConsistent()){
-				break;
+		// Adicionamos os axiomas de exp na ontologia criada até que todo o C
+		// seja inferido (esteja contido nas consequências)
+		for (OWLAxiom axiom: exp){				
+			manager.addAxiom(ont, axiom);
+			if (reasoner.isEntailed(C))
+	    		break;
+		}
+		// Second Part: SHRINK
+		// Para cada axioma em ont, removemo-lo e verificamos
+		// se C não é mais implicado. Nesse caso, o axioma é necessário para 
+		// inferir C e então ele deve fazer parte de X que pertence ao kernel
+		for (OWLAxiom axiom : ont.getAxioms()){
+			manager.removeAxiom(ont, axiom);
+			if (!reasoner.isEntailed(C)) {
+				X.add(axiom);
+				manager.addAxiom(ont,axiom);
 			}
 		}
-		
-		// Second Part: SHRINK
-		// Para cada axioma em exp, removemo-lo da ontologia ont (se contido) e
-		// verificamos se ela não é mais inconsistente. Nesse caso, o axioma é 
-		// necessário para gerar a inconsistência e, portanto, deve fazer parte
-		// de X, que pertence ao kernel
-		for (OWLAxiom axiom : exp){
-			if(ont.containsAxiom(axiom)) {
-				RemoveAxiom removeAxiom = new RemoveAxiom(ont, axiom);
-				manager.applyChange(removeAxiom);
-				if (reasoner.isConsistent()){
-					X.add(axiom);
-					AddAxiom addAxiom = new AddAxiom(ont, axiom);
-					manager.applyChange(addAxiom);
-				}	
-			}
-		}	
+		// Nesse ponto X é um dos elementos do kernel	
 		return X;	
 	}
-		
-	private void reiter(OWLOntology B){
-		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	
-		try {
-			for(Set<OWLAxiom> set : cut) {
-				for(OWLAxiom axiom : set) {
-					RemoveAxiom removeAxiom = new RemoveAxiom(B, axiom);
-					manager.applyChange(removeAxiom);
-				}
-				remainderSets.add(B.getAxioms());
-				for(OWLAxiom axiom : set) {
-					AddAxiom addAxiom = new AddAxiom(B, axiom);
-					manager.applyChange(addAxiom);
-				}
-			}
-		} catch (OWLOntologyChangeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

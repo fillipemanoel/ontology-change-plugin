@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
-//import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -26,11 +25,13 @@ import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
  */
 public class Kernel {
 	protected Set<Set<OWLAxiom>> kernelSet;
-	protected Set<Set<OWLAxiom>> cut;
 	
 	public Kernel(){
 		kernelSet = new HashSet<Set<OWLAxiom>>();
-		cut = new HashSet<Set<OWLAxiom>>();
+	}
+	
+	public void clear() {
+		kernelSet.clear();
 	}
 	
 	/**
@@ -54,7 +55,6 @@ public class Kernel {
     	Set<OWLAxiom> element = null;
     	Set<OWLAxiom> candidate = null;
     	Set<OWLAxiom> hn;
-    	boolean haveToContinue = false;
     
     	Set<OWLAxiom> exp = null;
 		
@@ -75,18 +75,7 @@ public class Kernel {
 		while(!queue.isEmpty()) {
 			hn = queue.remove();
 			
-			haveToContinue = false;
-			for(Set<OWLAxiom> set : cut) {
-				//Check if there is an element of cut that is contained in hn
-    			if(hn.containsAll(set)) { 
-    				haveToContinue = true;
-    				break;
-    			}
-			}
-    		if(haveToContinue)
-    			continue;
-    		
-    		for(OWLAxiom axiom : hn) {
+			for(OWLAxiom axiom : hn) {
     			RemoveAxiom removeAxiom = new RemoveAxiom(B, axiom);
     			manager.applyChange(removeAxiom);
     		}
@@ -101,7 +90,6 @@ public class Kernel {
     				queue.add(set2);
     			}
     		}
-    		else cut.add(hn);
     		
     		//Restore to the ontology the axioms removed so it can be used again
     		for(OWLAxiom axiom : hn) {

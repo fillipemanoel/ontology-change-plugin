@@ -22,7 +22,7 @@ import bcontractor.kernel.operators.BlackboxKernelOperator;
 import bcontractor.kernel.Kernel;
 
 /**
- * Authors: Márcio Moretto Ribeiro and Fillipe Resina
+ * @author Márcio Ribeiro and Fillipe Resina
  */
 
 public class ContractionView extends RevisorAbstractView {
@@ -43,7 +43,7 @@ public class ContractionView extends RevisorAbstractView {
 		for (OWLAxiom axiom : ontology.getABoxAxioms(false)) {
 			base = base.union(new OWLSentence(axiom));
 		}*/
-		MultipleContraction multiCont = new MultipleContraction();
+		MultipleContraction multiCont = new MultipleContraction(options);
 		Set<OWLAxiom> removed = new HashSet<OWLAxiom>();
 		for(AxiomButton ab : axiomGroup.getButtons())
 			removed.add(ab.getAxiom());
@@ -71,7 +71,7 @@ public class ContractionView extends RevisorAbstractView {
 	@Override
 	protected void postulateGroupsInit() {
 		
-    	postulateGroups = new PostulateGroup[4];
+    	postulateGroups = new PostulateGroup[5];
 		
     	PostulateButton successButton = new PostulateButton("success");
     	successButton.setToolTipText("a does not belong to K-a");
@@ -83,22 +83,26 @@ public class ContractionView extends RevisorAbstractView {
 		
 		PostulateButton relevanceButton = new PostulateButton("relevance");
 		
-		PostulateButton coreIdButton = new PostulateButton("core identity");
-		
-		PostulateButton meetIdButton = new PostulateButton("fullness");
+//		PostulateButton coreIdButton = new PostulateButton("core identity");
+//		
+//		PostulateButton meetIdButton = new PostulateButton("fullness");
 		
 		PostulateButton weakUniformityButton = new PostulateButton("weak uniformity");
 		
-		PostulateButton[] minimalityButtons = {coreRetButton, relevanceButton, coreIdButton, meetIdButton};
+		PostulateButton packageButton = new PostulateButton("Package");
+		PostulateButton choiceButton = new PostulateButton("Choice");
+		
+		PostulateButton[] minimalityButtons = {coreRetButton, relevanceButton};
+		PostulateButton[] multipleTypeButtons = {packageButton,choiceButton};	
 		
 		// Default Selected
 		coreRetButton.setSelected(true); 
 		
 		postulateGroups[0] = new PostulateGroup("Success", successButton);
 		postulateGroups[1] = new PostulateGroup("Inclusion", inclusionButton);
-		postulateGroups[2] = new PostulateGroup("Minimality", minimalityButtons);
+		postulateGroups[2] = new PostulateGroup("Minimality Type", minimalityButtons);
 		postulateGroups[3] = new PostulateGroup("Uniformity", weakUniformityButton);
-		
+		postulateGroups[4] = new PostulateGroup("Multiple Contraction Type", multipleTypeButtons);
 	}
 	
 	protected JPanel emptyKernelMessage(OWLAxiom a){
@@ -112,4 +116,3 @@ public class ContractionView extends RevisorAbstractView {
 	}
 
 }
-

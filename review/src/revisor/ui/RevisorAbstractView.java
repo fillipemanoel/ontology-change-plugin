@@ -24,7 +24,7 @@ import org.semanticweb.owlapi.model.OWLClassAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 /**
- * Authors: Márcio Moretto Ribeiro and Fillipe Resina
+ * @author Márcio Ribeiro and Fillipe Resina
  */
 
 public abstract class RevisorAbstractView extends
@@ -340,4 +340,3 @@ public abstract class RevisorAbstractView extends
 	}
 			
 }
-

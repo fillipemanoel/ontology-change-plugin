@@ -1,7 +1,7 @@
 package revisor.ui;
 
 /**
- * Authors: Márcio Moretto Ribeiro and Fillipe Resina
+ * @author Márcio Ribeiro and Fillipe Resina
  */
 
 public class PostulateGroup {
